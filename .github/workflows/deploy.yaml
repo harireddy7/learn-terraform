@@ -12,7 +12,7 @@ env:
   LOCATION: asia-south1-docker.pkg.dev
   IMAGE_PATH: asia-south1-docker.pkg.dev/learn-terraform-450109/arsenal/release
   SERVICE: release
-  BASE_VERSION: 0.0
+  BASE_VERSION: "0.0"
 
 jobs:
   build-publish-deploy:
@@ -52,15 +52,17 @@ jobs:
           terraform_version: "1.10.5"
 
       - name: Initialize terraform configuration
-        run: |
-          cd ./terraform
-          terraform init
+        run: terraform init
+        working-directory: ./terraform
 
       - name: Validate terraform configuration
         run: terraform validate
+        working-directory: ./terraform
 
       - name: Log terraform config changes
         run: terraform plan
+        working-directory: ./terraform
 
       - name: Apply terraform changes
         run: terraform apply -auto-approve
+        working-directory: ./terraform
