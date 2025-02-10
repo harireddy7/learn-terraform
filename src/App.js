@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Learn Terraform (v0.0.1)</h1>
+        <h1>Learn Terraform ({process.env.REACT_APP_VERSION})</h1>
       </header>
       <hr />
       <main>
