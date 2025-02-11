@@ -11,9 +11,6 @@ RUN yarn install --frozen-lockfile
 # Build time args
 ARG VERSION
 
-# container env variables
-ENV VERSION=${VERSION}
-
 COPY . ./
 
 RUN REACT_APP_VERSION=${VERSION} yarn build

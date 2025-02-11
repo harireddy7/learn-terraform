@@ -1,12 +1,18 @@
-# PROVIDERS
+# IMPORTS
+import {
+  id = "locations/asia-south1/namespaces/learn-terraform-450109/services/release"
+  to = google_cloud_run_service.default
+}
 
+# PROVIDERS
 provider "google" {
   project = "learn-terraform-450109"
   region  = "asia-south1"
 }
 
+# RESOURCES
 resource "google_cloud_run_service" "default" {
-  name     = "release2"
+  name     = "release"
   location = "asia-south1"
 
   template {
@@ -26,8 +32,6 @@ resource "google_cloud_run_service" "default" {
   }
 }
 
-# RESOURCES
-
 resource "google_cloud_run_service_iam_policy" "noauth" {
   location = google_cloud_run_service.default.location
   service  = google_cloud_run_service.default.name
@@ -43,7 +47,6 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 }
 
 # VARIABLES
-
 variable "image_path" {
   description = "Docker release image"
   type = string

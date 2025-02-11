@@ -44,6 +44,7 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ env.LOCATION }}
           docker build -t ${{ steps.set-docker-image.outputs.image_path }} --build-arg VERSION=${{ env.BASE_VERSION }}.${{ github.run_number }} ./
+          docker tag -t ${{ steps.set-docker-image.outputs.image_path }} latest
           docker push ${{ steps.set-docker-image.outputs.image_path }}
 
       - name: Install terraform
