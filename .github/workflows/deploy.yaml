@@ -43,9 +43,9 @@ jobs:
         id: build-and-publish
         run: |
           gcloud auth configure-docker ${{ env.LOCATION }}
-          docker build -t ${{ steps.set-docker-image.outputs.image_path }} --build-arg VERSION=${{ env.BASE_VERSION }}.${{ github.run_number }} ./
-          docker tag ${{ steps.set-docker-image.outputs.image_path }} latest
+          docker build -t ${{ steps.set-docker-image.outputs.image_path }} -t ${{ env.IMAGE_PATH }}:latest --build-arg VERSION=${{ env.BASE_VERSION }}.${{ github.run_number }} ./
           docker push ${{ steps.set-docker-image.outputs.image_path }}
+          docker push ${{ env.IMAGE_PATH }}:latest
 
       - name: Install terraform
         uses: hashicorp/setup-terraform@v3
