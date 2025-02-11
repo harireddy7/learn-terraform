@@ -60,9 +60,9 @@ jobs:
         working-directory: ./terraform
 
       - name: Log terraform config changes
-        run: terraform plan
+        run: terraform plan -var "image_path=${{ steps.set-docker-image.outputs.image_path }}"
         working-directory: ./terraform
 
       - name: Apply terraform changes
-        run: terraform apply -auto-approve
+        run: terraform apply -var "image_path=${{ steps.set-docker-image.outputs.image_path }}" -auto-approve
         working-directory: ./terraform
