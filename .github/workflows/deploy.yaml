@@ -1,0 +1,69 @@
+# Build and publish to GAR and deploy to Cloud Run
+
+name: Build and publish to GAR and deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main2
+
+env:
+  REGION: asia-south1
+  LOCATION: asia-south1-docker.pkg.dev
+  IMAGE_PATH: asia-south1-docker.pkg.dev/learn-terraform-450109/arsenal/release
+  SERVICE: release
+  BASE_VERSION: "0.0"
+
+jobs:
+  build-publish-deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP with Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEYS_JSON }}
+
+      - name: Install gcloud sdk
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: "456.0.0"
+
+      - name: Set docker image path
+        id: set-docker-image
+        run: echo "image_path=${{ env.IMAGE_PATH }}:${{ env.BASE_VERSION }}.${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      - name: Build and publish docker image to GAR
+        id: build-and-publish
+        run: |
+          gcloud auth configure-docker ${{ env.LOCATION }}
+          docker build -t ${{ steps.set-docker-image.outputs.image_path }} -t ${{ env.IMAGE_PATH }}:latest --build-arg VERSION=${{ env.BASE_VERSION }}.${{ github.run_number }} ./
+          docker push ${{ steps.set-docker-image.outputs.image_path }}
+          docker push ${{ env.IMAGE_PATH }}:latest
+
+      - name: Install terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - name: Initialize terraform configuration
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Validate terraform configuration
+        run: terraform validate
+        working-directory: ./terraform
+
+      - name: Log terraform config changes
+        run: terraform plan -var "image_path=${{ steps.set-docker-image.outputs.image_path }}"
+        working-directory: ./terraform
+
+      - name: Apply terraform changes
+        run: terraform apply -var "image_path=${{ steps.set-docker-image.outputs.image_path }}" -auto-approve
+        working-directory: ./terraform
