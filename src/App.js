@@ -5,6 +5,7 @@ function App() {
     <div className="App">
       <header>
         <h1>Learn Terraform ({process.env.REACT_APP_VERSION})</h1>
+        <small>Testing patch release in alpha - 1.0.0-alpha.1 to 1.0.1-alpha.1</small>
       </header>
       <hr />
       <main>
