@@ -6,7 +6,8 @@
     },
     {
       "name": "release/alpha-1.0",
-      "prerelease": "alpha"
+      "prerelease": "alpha",
+      "range": "1.x"
     },
     {
       "name": "main"
