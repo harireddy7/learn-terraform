@@ -1,13 +1,16 @@
 name: Pull Request
 
+# on:
+#   pull_request:
+#     branches:
+#       - dev
+#     types: [opened, synchronize, reopened]
+#   push:
+#     branches:
+#       - dev
+
 on:
-  pull_request:
-    branches:
-      - dev
-    types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - dev
+  workflow_call
 
 jobs:
   log-version:
