@@ -9,6 +9,7 @@ on:
       - main
       - release/alpha-*
       - bump-version
+      - release-bump
 
 jobs:
   get-release-version:
@@ -39,9 +40,6 @@ jobs:
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
           default: prerelease
-          # skip-tag: 'true'
-          # skip-commit: 'true'
-          # skip-push: 'true'
 
       - name: Log version
         run: echo "Next version is ${{ steps.bump.outputs.newTag }}"
