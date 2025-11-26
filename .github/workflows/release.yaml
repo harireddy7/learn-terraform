@@ -8,13 +8,14 @@ on:
       - dev
       - main
       - release/alpha-*
+      - bump-version
 
 jobs:
   get-release-version:
     name: Get next release version
     runs-on: ubuntu-latest
     outputs:
-      release-version: ${{ steps.get-version.outputs.release_version }}
+      release-version: ${{ steps.bump.outputs.newTag }}
     permissions:
       contents: write
       pull-requests: write
@@ -28,16 +29,32 @@ jobs:
         with:
           node-version: '24.10.0'
 
-      - name: Dry run semantic release
-        id: get-version
-        run: |
-          GH_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release --dry-run --verbose > release-temp.log
-          cat release-temp.log
-          echo "release_version=$(cat release-temp.log | grep -oiP 'the next release version is \K.*')" >> "$GITHUB_OUTPUT"
+      - name: Bump Version
+        id: bump
+        uses: phips28/gh-action-bump-version@v11.0.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          target-branch: ${{ github.ref_name }}
+          tag-prefix: 'v'
+          major-wording: 'BREAKING_CHANGE,major'
+          skip-tag: 'true'
+          skip-commit: 'true'
+          skip-push: 'true'
 
-      - name: Log release
-        run: echo "Next version is ${{ steps.get-version.outputs.release_version }}"
+      - name: Log version
+        run: echo "Next version is ${{ steps.bump.outputs.newTag }}"
 
-      - name: Release to GitHub
-        run: |
-          GH_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release
+      # - name: Dry run semantic release
+      #   id: get-version
+      #   run: |
+      #     GH_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release --dry-run --verbose > release-temp.log
+      #     cat release-temp.log
+      #     echo "release_version=$(cat release-temp.log | grep -oiP 'the next release version is \K.*')" >> "$GITHUB_OUTPUT"
+
+      # - name: Log release
+      #   run: echo "Next version is ${{ steps.get-version.outputs.release_version }}"
+
+      # - name: Release to GitHub
+      #   run: |
+      #     GH_TOKEN=${{ secrets.GITHUB_TOKEN }} npx semantic-release
