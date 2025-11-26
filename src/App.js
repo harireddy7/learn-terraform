@@ -10,9 +10,12 @@ function App() {
       <main>
         <p>
           Terraform is an open-source tool that helps users build, change, and
-          manage infrastructure. It's an <b><i>"infrastructure as code"</i></b> (IaC) tool
-          that uses a declarative configuration language to describe the desired
-          infrastructure.
+          manage infrastructure. It's an{" "}
+          <b>
+            <i>"infrastructure as code"</i>
+          </b>{" "}
+          (IaC) tool that uses a declarative configuration language to describe
+          the desired infrastructure.
         </p>
 
         <section>
