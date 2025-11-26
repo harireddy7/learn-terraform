@@ -9,6 +9,7 @@ on:
       - main
       - release/alpha-*
       - bump-version
+      - beta
 
 jobs:
   get-release-version:
@@ -38,6 +39,8 @@ jobs:
           target-branch: ${{ github.ref_name }}
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
+          version-type: prerelease
+          preid: beta
           # skip-tag: 'true'
           # skip-commit: 'true'
           # skip-push: 'true'
