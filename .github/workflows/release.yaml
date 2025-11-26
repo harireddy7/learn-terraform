@@ -38,6 +38,7 @@ jobs:
           target-branch: ${{ github.ref_name }}
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
+          default: prerelease
           # skip-tag: 'true'
           # skip-commit: 'true'
           # skip-push: 'true'
