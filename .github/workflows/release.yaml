@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           target-branch: ${{ github.ref_name }}
-          tag-prefix: 'v'
+          tag-prefix: ''
           major-wording: 'BREAKING_CHANGE,major'
           skip-commit: 'true'
           skip-tag: 'true'
@@ -50,3 +50,12 @@ jobs:
         run: |
           git log --oneline -10
           echo "New version: ${{ steps.bump.outputs.newTag }}"
+
+      - name: update package version
+        run: |
+          npm version ${{ steps.bump.outputs.newTag }} --no-git-tag-version
+          cat package.json
+          git commit -am "chore: bump version to ${{ steps.bump.outputs.newTag }}"
+          git push origin HEAD:${{ github.ref_name }}
+          git tag "v${{ steps.bump.outputs.newTag }}"
+          git push origin "v${{ steps.bump.outputs.newTag }}"
