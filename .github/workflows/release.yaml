@@ -49,13 +49,19 @@ jobs:
       - name: Log version
         run: |
           git log --oneline -10
-          echo "New version: ${{ steps.bump.outputs.newTag }}"
+          echo "version=${{ steps.bump.outputs.newTag }}" >> $GITHUB_OUTPUT
+          echo "New version: $version"
 
       - name: update package version
         run: |
-          npm version ${{ steps.bump.outputs.newTag }} --no-git-tag-version
+          jq '.version = "'$version'"' package.json > tmp.json && mv tmp.json package.json
           cat package.json
-          git commit -am "chore: bump version to ${{ steps.bump.outputs.newTag }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "chore: bump version to $version"
           git push origin HEAD:${{ github.ref_name }}
-          git tag "v${{ steps.bump.outputs.newTag }}"
-          git push origin "v${{ steps.bump.outputs.newTag }}"
+
+      - name: Create git tag
+        run: |
+          git tag "v$version"
+          git push origin "v$version"
