@@ -1,6 +1,6 @@
 {
   "name": "learn-terraform",
-  "version": "1.0.4-alpha.2",
+  "version": "1.0.4-alpha.3",
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
