@@ -5,6 +5,7 @@ const App = () => {
     <div className="App">
       <header>
         <h1>Learn Terraform ({process.env.REACT_APP_VERSION})</h1>
+        <small>Version: 1.0.7-alpha.1</small>
       </header>
       <hr />
       <main>
