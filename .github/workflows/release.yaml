@@ -10,6 +10,7 @@ on:
       - release/alpha-*
       - bump-version
       - release/bump-version/*
+      - bump-dry-run
 
 jobs:
   get-release-version:
@@ -39,8 +40,13 @@ jobs:
           target-branch: ${{ github.ref_name }}
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
+          skip-commit: 'false'
+          skip-tag: 'false'
+          skip-push: 'false'
           version-type: ${{ startsWith(github.ref_name, 'release/bump-version/') && 'prerelease' || '' }}
           preid: ${{ startsWith(github.ref_name, 'release/bump-version/') && 'alpha' || '' }}
 
       - name: Log version
-        run: echo "Next version is ${{ steps.bump.outputs.newTag }}"
+        run: |
+          git log --oneline -10
+          echo "New version: ${{ steps.bump.outputs.newTag }}"
