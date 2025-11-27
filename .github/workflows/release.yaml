@@ -39,8 +39,8 @@ jobs:
           target-branch: ${{ github.ref_name }}
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
-          version-type: prerelease
-          preid: alpha
+          version-type: ${{ startsWith(github.ref_name, 'release-') && 'prerelease' || '' }}
+          preid: ${{ startsWith(github.ref_name, 'release-') && 'alpha' || '' }}
 
       - name: Log version
         run: echo "Next version is ${{ steps.bump.outputs.newTag }}"
