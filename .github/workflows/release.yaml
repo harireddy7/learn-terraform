@@ -9,6 +9,7 @@ on:
       - main
       - release/alpha-*
       - bump-version
+      - release-bump
 
 jobs:
   get-release-version:
@@ -38,9 +39,8 @@ jobs:
           target-branch: ${{ github.ref_name }}
           tag-prefix: 'v'
           major-wording: 'BREAKING_CHANGE,major'
-          # skip-tag: 'true'
-          # skip-commit: 'true'
-          # skip-push: 'true'
+          version-type: ${{ startsWith(github.ref_name, 'release-') && 'prerelease' || '' }}
+          preid: ${{ startsWith(github.ref_name, 'release-') && 'alpha' || '' }}
 
       - name: Log version
         run: echo "Next version is ${{ steps.bump.outputs.newTag }}"

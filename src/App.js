@@ -1,6 +1,6 @@
 import "./App.css";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <header>
@@ -51,6 +51,6 @@ function App() {
       </main>
     </div>
   );
-}
+};
 
 export default App;
